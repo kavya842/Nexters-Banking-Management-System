@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Accounts</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{admin/layout :: nav}"></div>
+
+<h1>All Accounts</h1>
+
+<p th:if="${success}" th:text="${success}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Account No.</th>
+        <th>Customer</th>
+        <th>Type</th>
+        <th>Balance</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${accounts}">
+        <td th:text="${a.id}"></td>
+        <td th:text="${a.accountNumber}"></td>
+        <td th:text="${a.customer?.fullName}"></td>
+        <td th:text="${a.accountType}"></td>
+        <td th:text="${a.balance}"></td>
+        <td th:text="${a.status}"></td>
+        <td>
+            <form th:if="${a.status.name() == 'ACTIVE'}"
+                  th:action="@{/admin/accounts/{id}/freeze(id=${a.id})}"
+                  method="post" style="display:inline">
+                <button type="submit">Freeze</button>
+            </form>
+
+            <form th:if="${a.status.name() == 'FROZEN'}"
+                  th:action="@{/admin/accounts/{id}/unfreeze(id=${a.id})}"
+                  method="post" style="display:inline">
+                <button type="submit">Unfreeze</button>
+            </form>
+
+            <form th:if="${a.status.name() != 'CLOSED'}"
+                  th:action="@{/admin/accounts/{id}/close(id=${a.id})}"
+                  method="post" style="display:inline"
+                  onsubmit="return confirm('Close this account?');">
+                <button type="submit">Close</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(accounts)}">
+        <td colspan="7">No accounts found.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

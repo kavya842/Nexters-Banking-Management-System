@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="nav" class="admin-nav">
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/customers}">Customers</a>
+    <a th:href="@{/admin/accounts}">Accounts</a>
+    <a th:href="@{/admin/transactions}">Transactions</a>
+    <a th:href="@{/logout}">Logout</a>
+</nav>
+</body>
+</html>

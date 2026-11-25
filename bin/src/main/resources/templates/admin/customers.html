@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Customers</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{admin/layout :: nav}"></div>
+
+<h1>All Customers</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Address</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.fullName}"></td>
+        <td th:text="${c.phone}"></td>
+        <td th:text="${c.address}"></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(customers)}">
+        <td colspan="4">No customers found.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Transactions</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{admin/layout :: nav}"></div>
+
+<h1>Transactions</h1>
+
+<form th:action="@{/admin/transactions}" method="get">
+    From <input type="date" name="from" th:value="${from}">
+    To <input type="date" name="to" th:value="${to}">
+    Type
+    <select name="type">
+        <option value="">All</option>
+        <option th:each="t : ${types}"
+                th:value="${t}"
+                th:text="${t}"
+                th:selected="${t == selectedType}"></option>
+    </select>
+    <button type="submit">Filter</button>
+    <a th:href="@{/admin/transactions}">Reset</a>
+</form>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Account</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${transactions}">
+        <td th:text="${t.id}"></td>
+        <td th:text="${t.account?.accountNumber}"></td>
+        <td th:text="${t.type}"></td>
+        <td th:text="${t.amount}"></td>
+        <td th:text="${#temporals.format(t.timestamp, 'dd-MM-yyyy HH:mm')}"></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(transactions)}">
+        <td colspan="5">No transactions found.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
