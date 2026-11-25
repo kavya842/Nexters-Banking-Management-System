@@ -21,13 +21,16 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final CustomerProfileService customerProfileService;          // NEW
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+                       AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+                       CustomerProfileService customerProfileService) {   // NEW
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.customerProfileService = customerProfileService;             // NEW
     }
 
     @Transactional
@@ -37,6 +40,9 @@ public class AuthService {
         }
         User user = new User(req.email(), passwordEncoder.encode(req.password()), Role.CUSTOMER);
         user = userRepository.save(user);
+
+        customerProfileService.createProfile(user, req);                  // NEW
+
         return new UserResponse(user.getId(), user.getEmail(), user.getRole().name());
     }
 
